@@ -107,7 +107,6 @@ library
     Patrol.Type.PosixSignal
     Patrol.Type.ProguardDebugImage
     Patrol.Type.Request
-    Patrol.Type.Response
     Patrol.Type.RuntimeContext
     Patrol.Type.SpanStatus
     Patrol.Type.Stacktrace
@@ -183,7 +182,6 @@ test-suite patrol-test-suite
     Patrol.Type.PosixSignalSpec
     Patrol.Type.ProguardDebugImageSpec
     Patrol.Type.RequestSpec
-    Patrol.Type.ResponseSpec
     Patrol.Type.RuntimeContextSpec
     Patrol.Type.SpanStatusSpec
     Patrol.Type.StacktraceSpec

@@ -40,7 +40,6 @@ import qualified Patrol.Type.PlatformSpec
 import qualified Patrol.Type.PosixSignalSpec
 import qualified Patrol.Type.ProguardDebugImageSpec
 import qualified Patrol.Type.RequestSpec
-import qualified Patrol.Type.ResponseSpec
 import qualified Patrol.Type.RuntimeContextSpec
 import qualified Patrol.Type.SpanStatusSpec
 import qualified Patrol.Type.StacktraceSpec
@@ -95,7 +94,6 @@ spec = do
   Patrol.Type.PosixSignalSpec.spec
   Patrol.Type.ProguardDebugImageSpec.spec
   Patrol.Type.RequestSpec.spec
-  Patrol.Type.ResponseSpec.spec
   Patrol.Type.RuntimeContextSpec.spec
   Patrol.Type.SpanStatusSpec.spec
   Patrol.Type.StacktraceSpec.spec
