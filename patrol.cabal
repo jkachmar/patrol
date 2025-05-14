@@ -132,6 +132,7 @@ test-suite patrol-test-suite
     exceptions,
     hspec ^>=2.11.8,
     http-client,
+    http-client-tls,
     http-types,
     network-uri,
     text,
