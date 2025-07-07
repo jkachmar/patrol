@@ -17,24 +17,32 @@ import qualified Patrol.Extra.List as List
 import qualified Patrol.Type.ClientSdkInfo as ClientSdkInfo
 import qualified Patrol.Type.Dsn as Dsn
 import qualified Patrol.Type.Event as Event
+import qualified Patrol.Type.EventId as EventId
 import qualified Patrol.Type.Headers as Headers
 import qualified Patrol.Type.Item as Item
 
 -- | <https://develop.sentry.dev/sdk/data-model/envelopes/>
 data Envelope = Envelope
-  { headers :: Headers.Headers,
+  { eventId :: Maybe EventId.EventId,
+    -- ^ 'eventId' can be 'Nothing' if the 'Envelope' doesn't contain an
+    -- 'Event.Event' or if it contains an attachment that is not related to any
+    -- other 'Event.Event'.
+    headers :: Headers.Headers,
     items :: [Item.Item]
   }
   deriving (Eq, Show)
 
 fromEvent :: Dsn.Dsn -> Event.Event -> Envelope
 fromEvent dsn event =
-  Envelope
-    { headers =
+  let theEventId = Event.eventId event
+  in Envelope
+    { eventId = Just theEventId,
+      headers =
         Headers.fromObject
           . KeyMap.fromList
           $ Maybe.catMaybes
-            [ Just (Key.fromString "dsn", Aeson.toJSON $ Dsn.intoUri dsn),
+            [ Just (Key.fromString "event_id", Aeson.toJSON $ Aeson.toJSON theEventId),
+              Just (Key.fromString "dsn", Aeson.toJSON $ Dsn.intoUri dsn),
               Just (Key.fromString "sdk", Aeson.toJSON ClientSdkInfo.patrol),
               (,) (Key.fromString "sent_at") . Aeson.toJSON <$> Event.timestamp event
             ],

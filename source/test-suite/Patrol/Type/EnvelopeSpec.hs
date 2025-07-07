@@ -14,6 +14,7 @@ import qualified Patrol.Extra.Aeson as Aeson
 import qualified Patrol.Type.Dsn as Dsn
 import qualified Patrol.Type.Envelope as Envelope
 import qualified Patrol.Type.Event as Event
+import qualified Patrol.Type.EventId as EventId
 import qualified Patrol.Type.Headers as Headers
 import qualified Patrol.Type.Item as Item
 import qualified Patrol.Version as Version
@@ -27,7 +28,8 @@ spec = Hspec.describe "Patrol.Type.Envelope" $ do
             Builder.toLazyByteString $
               Envelope.serialize
                 Envelope.Envelope
-                  { Envelope.headers = Headers.empty,
+                  { Envelope.eventId = Nothing,
+                    Envelope.headers = Headers.empty,
                     Envelope.items = []
                   }
       actual `Hspec.shouldBe` "{}\n"
@@ -37,7 +39,8 @@ spec = Hspec.describe "Patrol.Type.Envelope" $ do
             Builder.toLazyByteString $
               Envelope.serialize
                 Envelope.Envelope
-                  { Envelope.headers = Headers.fromObject . KeyMap.singleton "a" $ Aeson.toJSON False,
+                  { Envelope.eventId = Nothing,
+                    Envelope.headers = Headers.fromObject . KeyMap.singleton "a" $ Aeson.toJSON False,
                     Envelope.items =
                       [ Item.Item
                           { Item.headers = Headers.fromObject . KeyMap.singleton "b" $ Aeson.toJSON True,
@@ -52,7 +55,8 @@ spec = Hspec.describe "Patrol.Type.Envelope" $ do
             Builder.toLazyByteString $
               Envelope.serialize
                 Envelope.Envelope
-                  { Envelope.headers = Headers.fromObject . KeyMap.singleton "a" $ Aeson.toJSON (1 :: Int),
+                  { Envelope.eventId = Nothing,
+                    Envelope.headers = Headers.fromObject . KeyMap.singleton "a" $ Aeson.toJSON (1 :: Int),
                     Envelope.items =
                       [ Item.Item
                           { Item.headers = Headers.fromObject . KeyMap.singleton "b" $ Aeson.toJSON (2 :: Int),
@@ -73,7 +77,8 @@ spec = Hspec.describe "Patrol.Type.Envelope" $ do
       let expected =
             Headers.fromObject $
               KeyMap.fromList
-                [ ("dsn", "http://key@sentry.test/1"),
+                [ ("event_id", Aeson.toJSON EventId.empty),
+                  ("dsn", "http://key@sentry.test/1"),
                   ( "sdk",
                     Aeson.object
                       [ Aeson.pair "name" ("patrol" :: String),
